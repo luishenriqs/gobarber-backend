@@ -4,7 +4,7 @@ import authConfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
 
 // Essa interface é usada para forçar a tipagem do decoded (token decodificado).
-interface TokenPayload {
+interface ITokenPayload {
   iat: number; // Quando o token foi gerado;
   exp: number; // Quando o token expira;
   sub: string; // Qual usuário gerou o token (user.id);
@@ -31,7 +31,7 @@ export default function ensureAuthenticated(
 
   try {
     const decoded = verify(token, authConfig.jwt.secret);
-    const { sub } = decoded as TokenPayload; // Forçando a tipagem da variável.
+    const { sub } = decoded as ITokenPayload; // Forçando a tipagem da variável.
 
     // Setando id do usuário como uma das informações da request da requisição.
     request.user = {

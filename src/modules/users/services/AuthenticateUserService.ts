@@ -1,25 +1,25 @@
-import { getRepository } from 'typeorm';
 import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
 import authConfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
 import User from '@modules/users/infra/typeorm/entities/User';
+import IUsersRepository from '../repositories/IUsersRepository';
 
-interface Request {
+interface IRequest {
   email: string;
   password: string;
 }
 
-interface Response {
+interface IResponse {
   user: User;
   token: string;
 }
 
 export default class AuthenticateUserService {
-  public async execute({ email, password }: Request): Promise<Response> {
-    const userRepository = getRepository(User);
+  constructor(private usersRepository: IUsersRepository) {}
 
-    const user = await userRepository.findOne({ where: { email } });
+  public async execute({ email, password }: IRequest): Promise<IResponse> {
+    const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       throw new AppError('Incorrect email/password combination.', 401);
     }
@@ -27,9 +27,12 @@ export default class AuthenticateUserService {
     // password => Senha não criptografada vinda do request.body.
     // user.password => Senha criptografada vinda do userRepository.
 
-    const passwordMatched = await compare(password, user.password);
-    if (!passwordMatched) {
-      throw new AppError('Incorrect email/password combination.', 401);
+    if (user.password) {
+      const passwordMatched = await compare(password, user.password);
+
+      if (!passwordMatched) {
+        throw new AppError('Incorrect email/password combination.', 401);
+      }
     }
 
     const { secret, expiresIn } = authConfig.jwt;

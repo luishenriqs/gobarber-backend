@@ -5,7 +5,6 @@ import CreateAppointmentService from '@modules/appointments/services/CreateAppoi
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 
 const appointmentsRouter = Router();
-const appointmentsRepository = new AppointmentsRepository();
 
 /* *************************************************************** */
 // PAPEL DE UMA ROTA:
@@ -22,11 +21,16 @@ appointmentsRouter.use(ensureAuthenticated);
 // });
 
 appointmentsRouter.post('/', async (request, response) => {
+  /* ATENÇÃO!
+  Instância de "AppointmentsRepository" temporariamente dentro de cada rota
+   para resolver bug descrito na aula do módulo 4,
+   "Refatorando módulo de usuário, minuto 14. " */
+   const appointmentsRepository = new AppointmentsRepository();
   const { provider_id, date } = request.body;
 
   const parsedDate = parseISO(date);
   const createAppointment = new CreateAppointmentService(
-    appointmentsRepository
+    appointmentsRepository,
   );
   const appointment = await createAppointment.execute({
     provider_id,

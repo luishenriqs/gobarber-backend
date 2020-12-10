@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
+import UsersRepository from '../../typeorm/repositories/UsersRepository';
 
 const sessionsRouter = Router();
 
@@ -9,10 +10,15 @@ const sessionsRouter = Router();
 /* **************************************************************** */
 
 sessionsRouter.post('/', async (request, response) => {
+  /* ATENÇÃO!
+  Instância de "UsersRepository" temporariamente dentro de cada rota
+   para resolver bug descrito na aula do módulo 4,
+   "Refatorando módulo de usuário, minuto 14. " */
+  const usersRepository = new UsersRepository();
   const { email, password } = request.body;
-  console.log(email, password)
+  console.log(email, password);
 
-  const authenticateUser = new AuthenticateUserService();
+  const authenticateUser = new AuthenticateUserService(usersRepository);
 
   const { user, token } = await authenticateUser.execute({
     email,
