@@ -2,10 +2,10 @@ import { Router } from 'express';
 // O multer é um middleware para upload de arquivos.
 import multer from 'multer';
 // uploadConfig são as configurações definidas para meus uploads.
-import uploadConfig from '../config/upload';
-import CreateUserService from '../services/CreateUserService';
-import ensureAuthenticated from '../middlewares/ensureAuthenticated';
-import UpdateUserAvatarService from '../services/UpdatUserAvatarService';
+import CreateUserService from '@modules/users/services/CreateUserService';
+import uploadConfig from '@config/upload';
+import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
+import UpdateUserAvatarService from '@modules/users/services/UpdatUserAvatarService';
 
 const usersRouter = Router();
 const upload = multer(uploadConfig);
