@@ -1,5 +1,6 @@
 import { compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
+import { inject, injectable } from 'tsyringe';
 import authConfig from '@config/auth';
 import AppError from '@shared/errors/AppError';
 import User from '@modules/users/infra/typeorm/entities/User';
@@ -15,8 +16,14 @@ interface IResponse {
   token: string;
 }
 
+/* Esse service é injetável.
+Ele recebe a injeção de dependência do repositório 'UsersRepository'; */
+@injectable()
 export default class AuthenticateUserService {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
+  ) {}
 
   public async execute({ email, password }: IRequest): Promise<IResponse> {
     const user = await this.usersRepository.findByEmail(email);

@@ -1,4 +1,5 @@
 import { startOfHour } from 'date-fns';
+import { inject, injectable } from 'tsyringe';
 import AppError from '@shared/errors/AppError';
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
@@ -7,9 +8,14 @@ interface IRequest {
   provider_id: string;
   date: Date;
 }
-
+/* Esse service é injetável.
+Ele recebe a injeção de dependência do repositório 'AppointmentsRepository'; */
+@injectable()
 class CreateAppointmentService {
-  constructor(private appointmentsRepository: IAppointmentsRepository) {}
+  constructor(
+    @inject('AppointmentsRepository')
+    private appointmentsRepository: IAppointmentsRepository,
+  ) {}
 
   public async execute({ provider_id, date }: IRequest): Promise<Appointment> {
     const AppointmentDate = startOfHour(date);
