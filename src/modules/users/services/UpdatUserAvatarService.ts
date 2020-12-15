@@ -1,9 +1,7 @@
-import path from 'path';
-import fs from 'fs';
 import { inject, injectable } from 'tsyringe';
 import User from '@modules/users/infra/typeorm/entities/User';
-import uploadConfig from '@config/upload';
 import AppError from '@shared/errors/AppError';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 
 interface IRequest {
@@ -11,13 +9,15 @@ interface IRequest {
   avatarFileName: string;
 }
 
-/* Esse service é injetável.
-Ele recebe a injeção de dependência do repositório 'UsersRepository'; */
+/* INJEÇÃO DE DEPENDÊNCIA; */
 @injectable()
 class UpdateUserAvatarService {
   constructor(
-    @inject('usersRepository')
+    @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('StorageProvider')
+    private storageProvider: IStorageProvider,
   ) {}
 
   public async execute({ user_id, avatarFileName }: IRequest): Promise<User> {
@@ -27,17 +27,14 @@ class UpdateUserAvatarService {
       throw new AppError('Only authenticated users can change avatar.', 401);
     }
 
+    // Se o arq. user.avatar já existir será deletado.
     if (user.avatar) {
-      const userAvatarFilePath = path.join(uploadConfig.directory, user.avatar);
-      const userAvatarFileExists = await fs.promises.stat(userAvatarFilePath);
-
-      // Se o arq. avatar já existir será deletado.
-      if (userAvatarFileExists) {
-        await fs.promises.unlink(userAvatarFilePath);
-      }
+      await this.storageProvider.deleteFile(user.avatar);
     }
+    // Após deletar o anterior o novo é salvo;
+    const filename = await this.storageProvider.saveFile(avatarFileName);
 
-    user.avatar = avatarFileName;
+    user.avatar = filename;
 
     await this.usersRepository.save(user);
 
