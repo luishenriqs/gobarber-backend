@@ -21,16 +21,16 @@ container.registerSingleton<IStorageProvider>(
   DiskStorageProvider,
 );
 
-/* Toda vez que for injetada a dependência 'MailProvider' será criada uma nova
-instância do 'EtherealMailProvider'; */
-container.registerInstance<IMailProvider>(
-  'MailProvider',
-  new EtherealMailProvider(),
-);
-
 /* Toda vez que for injetada a dependência 'MailTemplateProvider'
 será criada uma nova instância do 'HandlebarsMailTemplateProvider'; */
 container.registerSingleton<IMailTemplateProvider>(
   'MailTemplateProvider',
   HandlebarsMailTemplateProvider,
+);
+
+/* Toda vez que for injetada a dependência 'MailProvider' será criada uma nova
+instância do 'EtherealMailProvider'; */
+container.registerInstance<IMailProvider>(
+  'MailProvider',
+  container.resolve(EtherealMailProvider),
 );
