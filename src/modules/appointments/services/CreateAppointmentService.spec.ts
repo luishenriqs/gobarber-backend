@@ -3,6 +3,11 @@ import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRe
 import CreateAppointmentService from './CreateAppointmentService';
 
 describe('CreateAppointment', () => {
+  /* ***************************************************************************
+    APENAS DOIS TESTES, POR ISSO OPÇÃO DE NÃO USAR RECURSO DO 'beforeEach' QUE
+    EVITARIA A REPETIÇÃO DAS IMPORTAÇÕES EM CADA UM DELES;
+  *************************************************************************** */
+
   /* ************************************************************************ */
   /* Testa a criação de appointments pelo service CreateAppointmentService */
   it('should be able to create a new appointment', async () => {
@@ -13,11 +18,14 @@ describe('CreateAppointment', () => {
       fakeAppointmentsRepository,
     );
 
+    // Criando um novo 'appointment';
     const appointment = await createAppointment.execute({
       date: new Date(),
       provider_id: '123123123',
     });
 
+    /* Espera que o 'appointment' tenha a prop 'id' e que a prop 'provider_id'
+    seja igual a passada como segundo parâmetro; */
     expect(appointment).toHaveProperty('id');
     expect(appointment.provider_id).toBe('123123123');
   });

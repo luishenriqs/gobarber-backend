@@ -2,7 +2,7 @@
 
 # RESPONSABILIDADES:
 
-Abstrair as lógicas das rotas.
+**- Abstrair as lógicas das rotas -**
 
   1 - Recebe a requisição;
   2 - Repassa para outro arquivo;

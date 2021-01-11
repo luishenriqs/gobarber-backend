@@ -21,17 +21,17 @@ class UpdateUserAvatarService {
   ) {}
 
   public async execute({ user_id, avatarFileName }: IRequest): Promise<User> {
+    // Validação de autênticação do usuário;
     const user = await this.usersRepository.findById(user_id);
-
     if (!user) {
       throw new AppError('Only authenticated users can change avatar.', 401);
     }
 
-    // Se o arq. user.avatar já existir será deletado.
+    // Se o arq. 'user.avatar' já existir será deletado.
     if (user.avatar) {
       await this.storageProvider.deleteFile(user.avatar);
     }
-    // Após deletar o anterior o novo é salvo;
+    // Após deletar o arquivo anterior o novo é salvo;
     const filename = await this.storageProvider.saveFile(avatarFileName);
 
     user.avatar = filename;

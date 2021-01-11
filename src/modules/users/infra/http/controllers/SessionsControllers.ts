@@ -5,7 +5,6 @@ import AuthenticateUserService from '@modules/users/services/AuthenticateUserSer
 export default class SessionsController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
-    console.log(email, password);
 
     /* O 'container.resolve' injeta uma instância uma classe do service
     "AuthenticateUserService" dentro da rota;  */

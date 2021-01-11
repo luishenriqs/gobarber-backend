@@ -4,6 +4,11 @@ import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import CreateUserService from './CreateUserService';
 
 describe('CreateUser', () => {
+  /* ***************************************************************************
+    APENAS DOIS TESTES, POR ISSO OPÇÃO DE NÃO USAR RECURSO DO 'beforeEach' QUE
+    EVITARIA A REPETIÇÃO DAS IMPORTAÇÕES EM CADA UM DELES;
+  *************************************************************************** */
+
   /* ************************************************************************ */
   /* Teste do service 'CreateUserService'; */
   it('should be able to create a new user', async () => {
@@ -16,6 +21,7 @@ describe('CreateUser', () => {
       fakeHashProvider,
     );
 
+    // Primeiro cria um novo usuário;
     const user = await createUser.execute({
       name: 'Jonh Doe',
       email: 'jonhdoe@email.com',
@@ -42,6 +48,7 @@ describe('CreateUser', () => {
       fakeHashProvider,
     );
 
+    // Primeiro cria um novo usuário;
     await createUser.execute({
       name: 'Jonh Doe',
       email: 'jonhdoe@email.com',

@@ -3,19 +3,29 @@ import FakeStorageProvider from '@shared/container/providers/StorageProvider/fak
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import UpdateUserAvatarService from './UpdatUserAvatarService';
 
+let fakeStorageProvider: FakeStorageProvider;
+let fakeUsersRepository: FakeUsersRepository;
+let updateUserAvatar: UpdateUserAvatarService;
+
 describe('UpdateUserAvatar', () => {
   /* ************************************************************************ */
-  /* Teste do service 'UpdateUserAvatar'; */
-  it('should be able to update user.avatar', async () => {
-    const fakeStorageProvider = new FakeStorageProvider();
-    const fakeUsersRepository = new FakeUsersRepository();
+  /* O 'beforeEach' executa de forma automática todas as suas instruções
+  antes da execução de cada teste. Desta forma evita-se de repetir o mesmo
+  código em todos os testes; */
+  beforeEach(() => {
+    fakeStorageProvider = new FakeStorageProvider();
+    fakeUsersRepository = new FakeUsersRepository();
 
-    // Testando o 'UpdateUserAvatar';
-    const updateUserAvatar = new UpdateUserAvatarService(
+    updateUserAvatar = new UpdateUserAvatarService(
       fakeUsersRepository,
       fakeStorageProvider,
     );
+  });
+  /* ************************************************************************ */
 
+  /* ************************************************************************ */
+  /* Teste do service 'UpdateUserAvatar'; */
+  it('should be able to update user.avatar', async () => {
     // Primeiro cria um novo usuário;
     const user = await fakeUsersRepository.create({
       name: 'Jonh Doe',
@@ -37,15 +47,6 @@ describe('UpdateUserAvatar', () => {
   /* ************************************************************************ */
   /* Teste da condição de não atualizar avatar de usuário inexistênte; */
   it('should not be able to update user.avatar from non existing user', async () => {
-    const fakeStorageProvider = new FakeStorageProvider();
-    const fakeUsersRepository = new FakeUsersRepository();
-
-    // Testando o 'UpdateUserAvatar';
-    const updateUserAvatar = new UpdateUserAvatarService(
-      fakeUsersRepository,
-      fakeStorageProvider,
-    );
-
     // Espera que seja rejeitado o service para usuário não existênte;
     expect(
       updateUserAvatar.execute({
@@ -59,17 +60,8 @@ describe('UpdateUserAvatar', () => {
   /* ************************************************************************ */
   /* Teste da condição de deletar o avatar se existir previamente; */
   it('should be able to delete user.avatar if it already exists', async () => {
-    const fakeStorageProvider = new FakeStorageProvider();
-    const fakeUsersRepository = new FakeUsersRepository();
-
-    // O 'spyOn' retorna o método espionado;
+    // O 'spyOn' retorna informações do método espionado;
     const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
-
-    // Testando o 'UpdateUserAvatar';
-    const updateUserAvatar = new UpdateUserAvatarService(
-      fakeUsersRepository,
-      fakeStorageProvider,
-    );
 
     // Primeiro cria um novo usuário;
     const user = await fakeUsersRepository.create({
