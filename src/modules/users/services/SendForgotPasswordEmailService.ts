@@ -1,5 +1,6 @@
-import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
+import path from 'path';
+import AppError from '@shared/errors/AppError';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IUserTokensRepository from '../repositories/IUserTokensRepository';
@@ -23,14 +24,22 @@ export default class SendForgotPasswordEmailService {
   ) {}
 
   public async execute({ email }: IRequest): Promise<void> {
-    // Validação de existência do usuário;
     const user = await this.usersRepository.findByEmail(email);
+    // Validação de existência do usuário;
     if (!user) {
       throw new AppError('User does not exist');
     }
 
     // Geração do token de usuário;
     const { token } = await this.userTokensRepository.generate(user.id);
+
+    // Caminho para a busca do arquivo de template 'forgot_password.hbs';
+    const forgotPasswordTemplate = path.resolve(
+      __dirname,
+      '..',
+      'views',
+      'forgot_password.hbs',
+    );
 
     // Envio do email de recuperação de senha;
     await this.mailProvider.sendMail({
@@ -40,10 +49,10 @@ export default class SendForgotPasswordEmailService {
       },
       subject: '[Gobarber] recuperação de senha',
       templateData: {
-        template: 'Olá, {{name}}: {{token}}',
+        file: forgotPasswordTemplate,
         variables: {
           name: user.name,
-          token,
+          link: `http://localhost:3000/reset_password?token=${token}`,
         },
       },
     });

@@ -53,8 +53,8 @@ describe('ResetPasswordService', () => {
 
     /* Espectativa de que a senha esteja atualizada e que o método
     'generateHash' tenha sido chamado; */
-    expect(updatedUser?.password).toBe('789789');
-    expect(generateHash).toHaveBeenCalledWith('789789');
+    await expect(updatedUser?.password).toBe('789789');
+    await expect(generateHash).toHaveBeenCalledWith('789789');
   });
   /* ************************************************************************ */
 

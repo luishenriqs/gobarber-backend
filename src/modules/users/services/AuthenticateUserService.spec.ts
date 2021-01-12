@@ -43,8 +43,8 @@ describe('AuthenticateUser', () => {
     });
 
     // Espera que a 'response' receba a prop 'token' e 'user';
-    expect(response).toHaveProperty('token');
-    expect(response.user).toEqual(user);
+    await expect(response).toHaveProperty('token');
+    await expect(response.user).toEqual(user);
   });
   /* ************************************************************************ */
 
@@ -52,7 +52,7 @@ describe('AuthenticateUser', () => {
   /* Teste da condição de não autenticar usuário não existênte; */
   it('should not be able to authenticate with a non existing user', async () => {
     // Espera rejeitar autenticação com usuário não existênte;
-    expect(
+    await expect(
       authenticateUser.execute({
         email: 'jonhdoe@email.com',
         password: '123456',
@@ -72,7 +72,7 @@ describe('AuthenticateUser', () => {
     });
 
     // Espera rejeitar autenticação com senha incorreta;
-    expect(
+    await expect(
       authenticateUser.execute({
         email: 'jonhdoe@email.com',
         password: 'wrong-password',

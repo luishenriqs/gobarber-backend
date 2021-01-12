@@ -44,7 +44,7 @@ describe('SendForgotPasswordEmail', () => {
     });
 
     /* Espera a função tenha sido chamada; */
-    expect(sendMail).toHaveBeenCalled();
+    await expect(sendMail).toHaveBeenCalled();
   });
   /* ************************************************************************ */
 
@@ -78,7 +78,7 @@ describe('SendForgotPasswordEmail', () => {
 
     /* Espera chamar o método 'generate' do "fakeUserTokensRepository" passando
     o 'user.id' como parâmetro; */
-    expect(generateToken).toHaveBeenCalledWith(user.id);
+    await expect(generateToken).toHaveBeenCalledWith(user.id);
   });
   /* ************************************************************************ */
 });

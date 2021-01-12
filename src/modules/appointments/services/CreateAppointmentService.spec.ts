@@ -2,22 +2,25 @@ import AppError from '@shared/errors/AppError';
 import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
 import CreateAppointmentService from './CreateAppointmentService';
 
+let fakeAppointmentsRepository: FakeAppointmentsRepository;
+let createAppointment: CreateAppointmentService;
+
 describe('CreateAppointment', () => {
-  /* ***************************************************************************
-    APENAS DOIS TESTES, POR ISSO OPÇÃO DE NÃO USAR RECURSO DO 'beforeEach' QUE
-    EVITARIA A REPETIÇÃO DAS IMPORTAÇÕES EM CADA UM DELES;
-  *************************************************************************** */
+  /* ************************************************************************ */
+  /* O 'beforeEach' executa de forma automática todas as suas instruções
+  antes da execução de cada teste. Desta forma evita-se de repetir o mesmo
+  código em todos os testes; */
+  beforeEach(() => {
+    fakeAppointmentsRepository = new FakeAppointmentsRepository();
+    createAppointment = new CreateAppointmentService(
+      fakeAppointmentsRepository,
+    );
+  });
+  /* ************************************************************************ */
 
   /* ************************************************************************ */
   /* Testa a criação de appointments pelo service CreateAppointmentService */
   it('should be able to create a new appointment', async () => {
-    // Esse é o repositório fake;
-    const fakeAppointmentsRepository = new FakeAppointmentsRepository();
-    // Mas esse é o service verdadeiro que será testado;
-    const createAppointment = new CreateAppointmentService(
-      fakeAppointmentsRepository,
-    );
-
     // Criando um novo 'appointment';
     const appointment = await createAppointment.execute({
       date: new Date(),
@@ -26,21 +29,14 @@ describe('CreateAppointment', () => {
 
     /* Espera que o 'appointment' tenha a prop 'id' e que a prop 'provider_id'
     seja igual a passada como segundo parâmetro; */
-    expect(appointment).toHaveProperty('id');
-    expect(appointment.provider_id).toBe('123123123');
+    await expect(appointment).toHaveProperty('id');
+    await expect(appointment.provider_id).toBe('123123123');
   });
   /* ************************************************************************ */
 
   /* ************************************************************************ */
   /* Testa a condição de não criar dois agendamentos na mesma data e horário; */
   it('should not be able to create two appointments in the same time', async () => {
-    // Esse é o repositório fake;
-    const fakeAppointmentsRepository = new FakeAppointmentsRepository();
-    // Esse é o service verdadeiro que será testado;
-    const createAppointment = new CreateAppointmentService(
-      fakeAppointmentsRepository,
-    );
-
     const appointmentDate = new Date();
 
     // Cria o primeiro appointment;
@@ -49,7 +45,7 @@ describe('CreateAppointment', () => {
       provider_id: '123123123',
     });
     // Espera rejeitar a criação do segundo appointment na mesma data;
-    expect(
+    await expect(
       createAppointment.execute({
         date: appointmentDate,
         provider_id: '123123123',

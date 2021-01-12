@@ -40,7 +40,7 @@ describe('UpdateUserAvatar', () => {
     });
 
     // Espera que o user.avatar seja o mesmo passado como parâmetro;
-    expect(user.avatar).toBe('avatar.jpg');
+    await expect(user.avatar).toBe('avatar.jpg');
   });
   /* ************************************************************************ */
 
@@ -48,7 +48,7 @@ describe('UpdateUserAvatar', () => {
   /* Teste da condição de não atualizar avatar de usuário inexistênte; */
   it('should not be able to update user.avatar from non existing user', async () => {
     // Espera que seja rejeitado o service para usuário não existênte;
-    expect(
+    await expect(
       updateUserAvatar.execute({
         user_id: 'non-existent-user',
         avatarFileName: 'avatar.jpg',
@@ -85,8 +85,8 @@ describe('UpdateUserAvatar', () => {
 
     /* Espera a função tenha sido chamada tendo como parâmetro o primeiro avatar
     e que o 'user.avatar' esteja atualizado; */
-    expect(deleteFile).toHaveBeenCalledWith('avatar.jpg');
-    expect(user.avatar).toBe('avatar2.jpg');
+    await expect(deleteFile).toHaveBeenCalledWith('avatar.jpg');
+    await expect(user.avatar).toBe('avatar2.jpg');
   });
   /* ************************************************************************ */
 });

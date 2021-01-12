@@ -3,24 +3,26 @@ import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHa
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import CreateUserService from './CreateUserService';
 
+let fakeHashProvider: FakeHashProvider;
+let fakeUsersRepository: FakeUsersRepository;
+
+let createUser: CreateUserService;
+
 describe('CreateUser', () => {
-  /* ***************************************************************************
-    APENAS DOIS TESTES, POR ISSO OPÇÃO DE NÃO USAR RECURSO DO 'beforeEach' QUE
-    EVITARIA A REPETIÇÃO DAS IMPORTAÇÕES EM CADA UM DELES;
-  *************************************************************************** */
+  /* ************************************************************************ */
+  /* O 'beforeEach' executa de forma automática todas as suas instruções
+  antes da execução de cada teste. Desta forma evita-se de repetir o mesmo
+  código em todos os testes; */
+  beforeEach(() => {
+    fakeHashProvider = new FakeHashProvider();
+    fakeUsersRepository = new FakeUsersRepository();
+    createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+  });
+  /* ************************************************************************ */
 
   /* ************************************************************************ */
   /* Teste do service 'CreateUserService'; */
   it('should be able to create a new user', async () => {
-    const fakeHashProvider = new FakeHashProvider();
-    const fakeUsersRepository = new FakeUsersRepository();
-
-    // Testando o 'CreateUserService';
-    const createUser = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
     // Primeiro cria um novo usuário;
     const user = await createUser.execute({
       name: 'Jonh Doe',
@@ -28,26 +30,17 @@ describe('CreateUser', () => {
       password: '123456',
     });
 
-    expect(user).toHaveProperty('name');
-    expect(user).toHaveProperty('email');
-    expect(user).toHaveProperty('id');
-    expect(user.name).toBe('Jonh Doe');
-    expect(user.email).toBe('jonhdoe@email.com');
+    await expect(user).toHaveProperty('name');
+    await expect(user).toHaveProperty('email');
+    await expect(user).toHaveProperty('id');
+    await expect(user.name).toBe('Jonh Doe');
+    await expect(user.email).toBe('jonhdoe@email.com');
   });
   /* ************************************************************************ */
 
   /* ************************************************************************ */
   /* Teste da condição de não criar usuário com email já cadastrado por outro; */
   it('should not be able to create a new user with same email from another', async () => {
-    const fakeHashProvider = new FakeHashProvider();
-    const fakeUsersRepository = new FakeUsersRepository();
-
-    // Testando o 'CreateUserService';
-    const createUser = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
-
     // Primeiro cria um novo usuário;
     await createUser.execute({
       name: 'Jonh Doe',
@@ -56,7 +49,7 @@ describe('CreateUser', () => {
     });
 
     // Espera rejeitar a criação do usuário com email repetido;
-    expect(
+    await expect(
       createUser.execute({
         name: 'Jonh Doe Second',
         email: 'jonhdoe@email.com',
