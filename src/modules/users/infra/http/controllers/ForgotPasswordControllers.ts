@@ -6,8 +6,6 @@ export default class ForgotPasswordController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { email } = request.body;
 
-    /* O 'container.resolve' injeta uma instância da classe do service
-    "SendForgotPasswordEmailService" dentro da rota;  */
     const sendForgotPasswordEmail = container.resolve(
       SendForgotPasswordEmailService,
     );

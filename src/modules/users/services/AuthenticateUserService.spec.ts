@@ -2,11 +2,9 @@ import AppError from '@shared/errors/AppError';
 import FakeHashProvider from '@modules/users/providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import AuthenticateUserService from './AuthenticateUserService';
-import CreateUserService from './CreateUserService';
 
 let fakeHashProvider: FakeHashProvider;
 let fakeUsersRepository: FakeUsersRepository;
-let createUser: CreateUserService;
 let authenticateUser: AuthenticateUserService;
 
 describe('AuthenticateUser', () => {
@@ -17,7 +15,6 @@ describe('AuthenticateUser', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     fakeHashProvider = new FakeHashProvider();
-    createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
 
     authenticateUser = new AuthenticateUserService(
       fakeUsersRepository,
@@ -30,7 +27,7 @@ describe('AuthenticateUser', () => {
   /* Teste do service 'AuthenticateUserService' */
   it('should be able to authenticate', async () => {
     // Antes de autenticar um usuário ele precisa ser criado;
-    const user = await createUser.execute({
+    const user = await fakeUsersRepository.create({
       name: 'Jonh Doe',
       email: 'jonhdoe@email.com',
       password: '123456',
@@ -65,7 +62,7 @@ describe('AuthenticateUser', () => {
   /* Teste da condição de não autenticar usuário com senha errada; */
   it('should not be able to authenticate with wrong password', async () => {
     // Antes de autenticar um usuário ele precisa ser criado;
-    await createUser.execute({
+    await fakeUsersRepository.create({
       name: 'Jonh Doe',
       email: 'jonhdoe@email.com',
       password: '123456',

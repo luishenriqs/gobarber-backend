@@ -8,8 +8,6 @@ interface IRequest {
   user_id: string;
   avatarFileName: string;
 }
-
-/* INJEÇÃO DE DEPENDÊNCIA; */
 @injectable()
 class UpdateUserAvatarService {
   constructor(

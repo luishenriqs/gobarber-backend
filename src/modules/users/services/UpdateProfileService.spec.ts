@@ -95,7 +95,7 @@ describe('UpdateProfile', () => {
       password: '123123',
     });
 
-    /* Espera-se que o "name", o "email" e a "password" do "updatedUser" 
+    /* Espera-se que o "name", o "email" e a "password" do "updatedUser"
     sejam iguais aos passados como parâmetro; */
     await expect(updatedUser.name).toBe('Jonh Tree');
     await expect(updatedUser.email).toBe('jonhtree@example.com');
@@ -103,7 +103,7 @@ describe('UpdateProfile', () => {
   });
   /* ************************************************************************ */
 
-    /* ************************************************************************ */
+  /* ************************************************************************ */
   /* Teste da condição de não atualizar senha sem o envio de senha antiga; */
   it('should not be able to update the password without old_password', async () => {
     // Primeiro cria um novo usuário;
@@ -112,9 +112,6 @@ describe('UpdateProfile', () => {
       email: 'jonhdoe@email.com',
       password: '123456',
     });
-
-    // Depois executa o service 'UpdateProfile';
-    const updatedUser = await 
 
     /* Espera-se que a requisição seja rejeitada por não apresentar "old_password"; */
     await expect(
@@ -128,7 +125,7 @@ describe('UpdateProfile', () => {
   });
   /* ************************************************************************ */
 
-      /* ************************************************************************ */
+  /* ************************************************************************ */
   /* Teste da condição de não atualizar senha com senha antiga incorreta; */
   it('should not be able to update the password with wrong old_password', async () => {
     // Primeiro cria um novo usuário;

@@ -28,7 +28,7 @@ class UpdateProfile {
     name,
     email,
     password,
-    old_password
+    old_password,
   }: IRequest): Promise<User> {
     const user = await this.usersRepository.findById(user_id);
     if (!user) {
@@ -51,7 +51,7 @@ class UpdateProfile {
 
     // Verificação se foi informado senha nova e senha antiga;
     if (password && !old_password) {
-      throw new AppError('You need to informe your old password.')
+      throw new AppError('You need to informe your old password.');
     }
 
     // Verificação se senha antiga informada confere com a do registro do usuário;
@@ -59,9 +59,9 @@ class UpdateProfile {
       const checkOldPassword = await this.hashProvider.compareHash(
         old_password,
         user.password,
-      )
+      );
       if (!checkOldPassword) {
-        throw new AppError('Old password does not match.')
+        throw new AppError('Old password does not match.');
       }
     }
 

@@ -33,7 +33,7 @@ export default function ensureAuthenticated(
     const decoded = verify(token, authConfig.jwt.secret);
     const { sub } = decoded as ITokenPayload; // Forçando a tipagem da variável.
 
-    // Setando id do usuário como uma das informações da request da requisição.
+    // Setando id do usuário como uma das informações do request da requisição.
     request.user = {
       id: sub,
     };

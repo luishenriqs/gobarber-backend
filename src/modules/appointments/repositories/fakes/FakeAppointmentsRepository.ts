@@ -1,34 +1,87 @@
-import { v4 as uuidv4 } from 'uuid';
+import { uuid } from 'uuidv4';
+import { isEqual, getMonth, getYear, getDate } from 'date-fns';
 import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentsRepository';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
-import { isEqual } from 'date-fns';
+import IFindAllInMonthFromProviderDTO from '@modules/appointments/dtos/IFindAllInMonthFromProviderDTO';
+import IFindAllInDayFromProviderDTO from '@modules/appointments/dtos/IFindAllInDayFromProviderDTO';
 import Appointment from '../../infra/typeorm/entities/Appointment';
 
-/* Appointment Repository fake criado para testes. Substitui database;  */
 class AppointmentsRepository implements IAppointmentsRepository {
   private appointments: Appointment[] = [];
 
-  // Procura no array de appointments por um que tenha mesmo date;
-  public async findByDate(date: Date): Promise<Appointment | undefined> {
-    const findAppointment = this.appointments.find(appointment =>
-      isEqual(appointment.date, date),
+  /* ****************************[FIND BY DATE]****************************** */
+  public async findByDate(
+    date: Date,
+    provider_id: string,
+  ): Promise<Appointment | undefined> {
+    const findAppointment = this.appointments.find(
+      appointment =>
+        isEqual(appointment.date, date) &&
+        appointment.provider_id === provider_id,
     );
     return findAppointment;
   }
+  /* ************************************************************************ */
 
+  /* *************************[FIND ALL IN MONTH]**************************** */
+  public async findAllInMonthFromProvider({
+    provider_id,
+    month,
+    year,
+  }: IFindAllInMonthFromProviderDTO): Promise<Appointment[]> {
+    const appointments = this.appointments.filter(appointment => {
+      return (
+        appointment.provider_id === provider_id &&
+        getMonth(appointment.date) + 1 === month &&
+        getYear(appointment.date) === year
+      );
+    });
+
+    return appointments;
+  }
+  /* OBS: Nas bibliotecas de datas o mês sempre começa do zero, por isso no
+  'getMonth' é necessário adicionar + 1 ao valor do 'month'; */
+  /* ************************************************************************ */
+
+  /* ************************[FIND ALL IN DAY]******************************* */
+  public async findAllInDayFromProvider({
+    provider_id,
+    day,
+    month,
+    year,
+  }: IFindAllInDayFromProviderDTO): Promise<Appointment[]> {
+    const appointments = this.appointments.filter(appointment => {
+      return (
+        appointment.provider_id === provider_id &&
+        getDate(appointment.date) === day &&
+        getMonth(appointment.date) + 1 === month &&
+        getYear(appointment.date) === year
+      );
+    });
+    return appointments;
+  }
+  /* OBS: No 'date-fns' o 'getDate' retorna o dia do mês. Para retornar o dia
+  da semana use o 'getDay';
+  O primeiro dia do mês pelo 'getDate' => 1;
+  O primeiro mês do ano pelo 'getMonth' => 0; Por isso o '(+1)' no 'getMonth';
+  */
+  /* ************************************************************************ */
+
+  /* *****************************[CREATE]*********************************** */
   public async create({
     provider_id,
+    user_id,
     date,
   }: ICreateAppointmentDTO): Promise<Appointment> {
     const appointment = new Appointment();
 
-    // Insere no primeiro parâmetro (appointment) as propriedades passadas no objeto;
-    Object.assign(appointment, { id: uuidv4(), date, provider_id });
+    Object.assign(appointment, { id: uuid(), date, provider_id, user_id });
 
     this.appointments.push(appointment);
 
     return appointment;
   }
+  /* ************************************************************************ */
 }
 
 export default AppointmentsRepository;

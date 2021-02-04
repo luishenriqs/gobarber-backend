@@ -1,19 +1,25 @@
 import { Request, Response } from 'express';
-import { parseISO } from 'date-fns';
 import { container } from 'tsyringe';
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 
 export default class AppointmentsController {
   public async create(request: Request, response: Response): Promise<Response> {
+    // Recupera o id do usuario logado que foi setado pelo Midleware;
+    const user_id = request.user.id;
+
+    // Pega os demais dados para criar appointments;
     const { provider_id, date } = request.body;
-    const parsedDate = parseISO(date);
-    /* O 'container.resolve' injeta uma instância uma classe do service
-    "CreateAppointmentService" dentro da rota;  */
-    const createAppointment = container.resolve(CreateAppointmentService);
-    const appointment = await createAppointment.execute({
+
+    const CreateAppointment = container.resolve(CreateAppointmentService);
+
+    // Cria um novo appointment;
+    const appointment = await CreateAppointment.execute({
+      date,
       provider_id,
-      date: parsedDate,
+      user_id,
     });
+
+    // Retorna o appointment criado;
     return response.json(appointment);
   }
 }
