@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 
+/* **********************[ROTA CREATE APPOINTMENT]*************************** */
 export default class AppointmentsController {
   public async create(request: Request, response: Response): Promise<Response> {
     // Recupera o id do usuario logado que foi setado pelo Midleware;
@@ -23,3 +24,4 @@ export default class AppointmentsController {
     return response.json(appointment);
   }
 }
+/* ************************************************************************** */

@@ -13,12 +13,12 @@ const profileController = new ProfileController();
 profileRouter.use(ensureAuthenticated);
 /* ************************************************************************** */
 
-/* ************************************************************************** */
+/* **************************[SHOW PROFILE]********************************** */
 /* Rota para listar; */
 profileRouter.get('/', profileController.show);
 /* ************************************************************************** */
 
-/* ************************************************************************** */
+/* ***************************[UPDATE PROFILE]******************************* */
 /* Rota para fazer alterações no perfil do usuario; */
 /* OBS: 'celebrate': Validando o seguimento BODY (request.body); */
 /* OBS: '.valid(Joi.ref('password'))' => Único valor válido é o 'password'; */

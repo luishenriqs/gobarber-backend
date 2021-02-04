@@ -17,12 +17,12 @@ const providerDayAvailabilityController = new ProviderDayAvailabilityController(
 providersRouter.use(ensureAuthenticated);
 /* ************************************************************************** */
 
-/* ************************************************************************** */
+/* *************************[LIST PROVIDERS]********************************* */
 // Rota para lista todos os providers exceto o usuário logado.
 providersRouter.get('/', providersController.index);
 /* ************************************************************************** */
 
-/* ************************************************************************** */
+/* ************************[DAY AVAILABILITY]******************************** */
 // Rota para listar cada dia do mês e a disponibilidade do provider no dia;
 // OBS: 'celebrate': Validando o seguimento PARAMS (request.params);
 providersRouter.get(
@@ -36,7 +36,7 @@ providersRouter.get(
 );
 /* ************************************************************************** */
 
-/* ************************************************************************** */
+/* **************************[AVAILABILITY]********************************** */
 /* Rota para listar todos os horários de um provider no dia específico e suas
 respectivas disponibilidades; */
 // OBS: 'celebrate': Validando o seguimento PARAMS (request.params);

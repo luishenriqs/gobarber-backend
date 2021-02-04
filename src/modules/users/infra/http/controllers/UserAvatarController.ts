@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 
+/* ********************[ROTA UPDATE USER AVATAR]***************************** */
 export default class UserAvatarController {
   public async update(request: Request, response: Response): Promise<Response> {
     const updateUserAvatar =container.resolve(UpdateUserAvatarService);
@@ -15,3 +16,4 @@ export default class UserAvatarController {
     return response.json(classToClass(user));
   }
 }
+/* ************************************************************************** */

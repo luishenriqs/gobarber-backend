@@ -15,7 +15,7 @@ const providerAppointmentsController = new ProviderAppointmentsController();
 appointmentsRouter.use(ensureAuthenticated);
 /* ************************************************************************** */
 
-/* ************************************************************************** */
+/* *************************[CREATE APPOINTMENT]***************************** */
 // Rota para criação de appointments;
 // OBS: 'celebrate': Validando o seguimento BODY (request.body);
 appointmentsRouter.post(
@@ -30,7 +30,7 @@ appointmentsRouter.post(
 );
 /* ************************************************************************** */
 
-/* ************************************************************************** */
+/* ********************[LIST APPOINTMENTS PROVIDER]************************** */
 // Rota de listagem dos appointments do usuário logado em um dia específico;
 appointmentsRouter.get('/me', providerAppointmentsController.index);
 /* ************************************************************************** */

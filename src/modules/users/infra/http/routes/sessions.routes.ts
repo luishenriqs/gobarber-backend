@@ -7,7 +7,7 @@ const sessionsRouter = Router();
 
 const sessionsController =  new SessionsController();
 
-/* ************************************************************************** */
+/* ***************************[AUTHENTICATE]********************************* */
 /* Rota de login(autenticacao); */
 /* OBS: 'celebrate': Validando o seguimento BODY (request.body); */
 sessionsRouter.post(

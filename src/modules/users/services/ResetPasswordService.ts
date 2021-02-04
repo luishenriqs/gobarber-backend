@@ -24,8 +24,9 @@ export default class ResetPasswordService {
     private hashProvider: IHashProvider,
   ) {}
 
-  /* Como parâmetro recebo o 'token' que será usado para encontrar o 'user',
-  e o novo 'password' que será resetado no lugar do antigo; */
+  /* Como parâmetro recebo o token exclusivo para o 'ResetPassword' (ele será
+  usado para encontrar o 'user'), e o novo 'password' que será resetado no
+  lugar do password antigo; */
   public async execute({ token, password }: IRequest): Promise<void> {
     // Com o 'token' encontro o 'usertoken';
     const userToken = await this.userTokensRepository.findByToken(token);

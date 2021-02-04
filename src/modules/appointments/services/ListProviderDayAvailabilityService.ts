@@ -36,6 +36,7 @@ class ListProviderDayAvailabilityService {
         day,
       },
     );
+    console.log('log do service Day: ', appointments)
 
     const hourStart = 8;
 

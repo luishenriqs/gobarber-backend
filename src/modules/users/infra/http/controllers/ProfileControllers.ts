@@ -4,6 +4,7 @@ import { classToClass } from 'class-transformer';
 import UpdateProfileService from '@modules/users/services/UpdateProfileService';
 import ShowProfileService from '@modules/users/services/ShowProfileService';
 
+/* **********************[ROTA ]********************************** */
 export default class ProfileController {
   public async show(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
@@ -14,7 +15,9 @@ export default class ProfileController {
 
     return response.json(classToClass(user));
   }
+  /* ************************************************************************** */
 
+  /* **********************[ROTA ]********************************** */
   public async update(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
     const { name, email, old_password, password } = request.body;
@@ -33,4 +36,5 @@ export default class ProfileController {
     // Retorna o usuario criado;
     return response.json(classToClass(user));
   }
+  /* ************************************************************************** */
 }

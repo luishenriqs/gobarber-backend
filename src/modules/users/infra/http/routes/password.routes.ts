@@ -9,7 +9,7 @@ const passwordRouter = Router();
 const forgotPasswordController =  new ForgotPasswordController();
 const resetPasswordController =  new ResetPasswordController();
 
-/* ************************************************************************** */
+/* *************************[FORGOT PASSWORD]******************************** */
 /* Rota para solicitar o reset de senha; */
 /* OBS: 'celebrate': Validando o seguimento BODY (request.body); */
 passwordRouter.post(
@@ -23,7 +23,7 @@ passwordRouter.post(
 );
 /* ************************************************************************** */
 
-/* ************************************************************************** */
+/* **************************[RESET PASSWORD]******************************** */
 /* Rota para resetar a senha; */
 /* OBS: 'celebrate': Validando o seguimento BODY (request.body); */
 /* OBS: '.valid(Joi.ref('password'))' => Único valor válido é o 'password'; */

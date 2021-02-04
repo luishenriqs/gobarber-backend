@@ -33,6 +33,7 @@ class ListProviderMonthAvailabilityService {
         month,
       },
     );
+    console.log("log do service Month: ", appointments)
 
     // Retorna a quantidade de dias deste mês específico;
     const numberOfDaysInMonth = getDaysInMonth(new Date(year, month - 1));

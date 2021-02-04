@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
 import ListProvidersService from '@modules/appointments/services/ListProvidersService';
 
+/* ************************[ROTA LIST PROVIDERS]***************************** */
 export default class ProvidersController {
   public async index(request: Request, response: Response): Promise<Response> {
     // Recupera o id do usuario logado que foi setado pelo Midleware;
@@ -19,3 +20,4 @@ export default class ProvidersController {
     return response.json(classToClass(providers));
   }
 }
+/* ************************************************************************** */

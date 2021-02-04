@@ -9,7 +9,6 @@ interface IRequest {
   email: string;
 }
 
-/* INJEÇÃO DE DEPENDÊNCIA */
 @injectable()
 export default class SendForgotPasswordEmailService {
   constructor(
@@ -30,7 +29,7 @@ export default class SendForgotPasswordEmailService {
       throw new AppError('User does not exist');
     }
 
-    // Geração do token de usuário;
+    /* Geração do token de usuário; Token exclusivo a ser usado no Reset Password; */
     const { token } = await this.userTokensRepository.generate(user.id);
 
     // Caminho para a busca do arquivo de template 'forgot_password.hbs';
@@ -42,6 +41,7 @@ export default class SendForgotPasswordEmailService {
     );
 
     // Envio do email de recuperação de senha;
+    /* Com o user.email e o token é possível efetuar o 'Reset Password'; */
     await this.mailProvider.sendMail({
       to: {
         name: user.name,

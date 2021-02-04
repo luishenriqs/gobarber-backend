@@ -15,7 +15,7 @@ const upload = multer(uploadConfig.multer);
 const usersController = new UsersController();
 const userAvatarController =  new UserAvatarController();
 
-/* ************************************************************************** */
+/* *************************[CREATE USER]************************************ */
 /* Rota para criação usuario; */
 /* OBS: 'celebrate': Validando o seguimento BODY (request.body); */
 usersRouter.post(
@@ -31,7 +31,7 @@ usersRouter.post(
 );
 /* ************************************************************************** */
 
-/* ************************************************************************** */
+/* ***************************[UPDATE AVATAR]******************************** */
 /* Rota para alteração de avatar do usuario; */
 usersRouter.patch(
   '/avatar',
